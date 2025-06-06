@@ -103,11 +103,16 @@
 import { ref } from "vue";
 import { calcBadHand } from "./utils/calc_bad_hand";
 
-const inputs = ref({
-  deck: 60 as number | null,
-  hand: 7 as number | null,
-  goodArtist: 4 as number | null,
-  badArtist: 1 as number | null,
+const inputs = ref<{
+  deck: number | null;
+  hand: number | null;
+  goodArtist: number | null;
+  badArtist: number | null;
+}>({
+  deck: 60,
+  hand: 7,
+  goodArtist: 4,
+  badArtist: 1,
 });
 
 const result = ref<number | null>(null);
@@ -119,8 +124,8 @@ const calculate = () => {
   if (
     !inputs.value.deck ||
     !inputs.value.hand ||
-    inputs.value.goodArtist === null ||
-    inputs.value.badArtist === null
+    inputs.value.goodArtist == null ||
+    inputs.value.badArtist == null
   ) {
     error.value = "すべての項目を入力してください";
     return;

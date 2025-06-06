@@ -1,39 +1,32 @@
 /**
- * 組み合わせの数（nCk）をメモ化を利用した再帰で計算します。
+ * 組み合わせの数（nCk）を効率的に計算します。
  * @param n - 全体の要素数
  * @param k - 選ぶ要素の数
  * @returns 組み合わせの数
  */
-function combinWithMemo(n: number, k: number): number {
-  // 計算結果を保存するキャッシュオブジェクト
-  const memo: { [key: string]: number } = {};
-
-  function recursiveCombin(n: number, k: number): number {
-    const key = `${n},${k}`;
-    // キャッシュに結果があればそれを返す
-    if (key in memo) {
-      return memo[key];
-    }
-
-    if (k === 0 || k === n) {
-      return 1;
-    }
-
-    if (k < 0 || k > n) {
-      return 0;
-    }
-
-    if (k > n / 2) {
-      k = n - k;
-    }
-
-    // 計算結果をキャッシュに保存してから返す
-    const result = recursiveCombin(n - 1, k - 1) + recursiveCombin(n - 1, k);
-    memo[key] = result;
-    return result;
+function combination(n: number, k: number): number {
+  // 基本的なケースの処理
+  if (k === 0 || k === n) {
+    return 1;
   }
 
-  return recursiveCombin(n, k);
+  if (k < 0 || k > n) {
+    return 0;
+  }
+
+  // k > n/2 の場合、計算を最適化するため k = n - k を使用
+  if (k > n / 2) {
+    k = n - k;
+  }
+
+  // 反復的にC(n, k) = n! / (k! * (n-k)!) を計算
+  // オーバーフローを避けるため、除算を組み込んで計算
+  let result = 1;
+  for (let i = 0; i < k; i++) {
+    result = (result * (n - i)) / (i + 1);
+  }
+
+  return Math.round(result);
 }
 
 export function calcBadHand(
@@ -42,12 +35,12 @@ export function calcBadHand(
   goodArtist: number,
   badArtist: number
 ): number {
-  const allHand = combinWithMemo(deck, hand);
+  const allHand = combination(deck, hand);
 
-  const noArtist = combinWithMemo(deck - goodArtist - badArtist, hand);
+  const noArtist = combination(deck - goodArtist - badArtist, hand);
   const existArtist = allHand - noArtist;
 
-  const noGoodArtist = combinWithMemo(deck - goodArtist, hand);
+  const noGoodArtist = combination(deck - goodArtist, hand);
   const existGoodArtist = allHand - noGoodArtist;
 
   const onlyBadArtist = existArtist - existGoodArtist;
