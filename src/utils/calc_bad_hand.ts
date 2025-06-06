@@ -51,7 +51,7 @@ export function calcBadHand(
   const existGoodArtist = allHand - noGoodArtist;
 
   const onlyBadArtist = existArtist - existGoodArtist;
-  const onlyBadArtistRate = (onlyBadArtist / allHand) * 100;
+  const onlyBadArtistRate = (onlyBadArtist / existArtist) * 100;
 
   return onlyBadArtistRate;
 }
