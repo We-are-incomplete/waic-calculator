@@ -7,69 +7,18 @@
 
       <div class="bg-white rounded-lg shadow-lg p-6">
         <form @submit.prevent="calculate" class="space-y-6">
-          <div>
+          <div v-for="field in formFields" :key="field.id">
             <label
-              for="deck"
+              :for="field.id"
               class="block text-sm font-medium text-gray-700 mb-2"
             >
-              デッキ枚数
+              {{ field.label }}
             </label>
             <input
-              id="deck"
-              v-model.number="inputs.deck"
-              type="number"
-              min="1"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label
-              for="hand"
-              class="block text-sm font-medium text-gray-700 mb-2"
-            >
-              手札枚数
-            </label>
-            <input
-              id="hand"
-              v-model.number="inputs.hand"
-              type="number"
-              min="1"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label
-              for="goodArtist"
-              class="block text-sm font-medium text-gray-700 mb-2"
-            >
-              来てほしいArtistの枚数
-            </label>
-            <input
-              id="goodArtist"
-              v-model.number="inputs.goodArtist"
-              type="number"
-              min="0"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label
-              for="badArtist"
-              class="block text-sm font-medium text-gray-700 mb-2"
-            >
-              来てほしくないArtistの枚数
-            </label>
-            <input
-              id="badArtist"
-              v-model.number="inputs.badArtist"
-              type="number"
-              min="0"
+              :id="field.id"
+              v-model.number="inputs[field.modelKey]"
+              :type="field.type"
+              :min="field.min"
               required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -118,14 +67,34 @@ const inputs = ref<{
 const result = ref<number | null>(null);
 const error = ref<string | null>(null);
 
+const formFields = [
+  { id: "deck", label: "デッキ枚数", modelKey: "deck", type: "number", min: 1 },
+  { id: "hand", label: "手札枚数", modelKey: "hand", type: "number", min: 1 },
+  {
+    id: "goodArtist",
+    label: "来てほしいArtistの枚数",
+    modelKey: "goodArtist",
+    type: "number",
+    min: 0,
+  },
+  {
+    id: "badArtist",
+    label: "来てほしくないArtistの枚数",
+    modelKey: "badArtist",
+    type: "number",
+    min: 0,
+  },
+];
+
 const calculate = () => {
   error.value = null;
+  result.value = null;
 
   if (
-    !inputs.value.deck ||
-    !inputs.value.hand ||
-    inputs.value.goodArtist == null ||
-    inputs.value.badArtist == null
+    inputs.value.deck === null ||
+    inputs.value.hand === null ||
+    inputs.value.goodArtist === null ||
+    inputs.value.badArtist === null
   ) {
     error.value = "すべての項目を入力してください";
     return;
@@ -133,21 +102,14 @@ const calculate = () => {
 
   const { deck, hand, goodArtist, badArtist } = inputs.value;
 
-  // バリデーション
-  if (hand > deck) {
-    error.value = "手札枚数はデッキ枚数以下にしてください";
-    return;
-  }
-
-  if (goodArtist + badArtist > deck) {
-    error.value = "アーティストの合計枚数はデッキ枚数以下にしてください";
-    return;
-  }
-
   try {
     result.value = calcBadHand(deck, hand, goodArtist, badArtist);
-  } catch (err) {
-    error.value = "計算中にエラーが発生しました";
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      error.value = err.message;
+    } else {
+      error.value = "計算中に不明なエラーが発生しました";
+    }
     console.error(err);
   }
 };
