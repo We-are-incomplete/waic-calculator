@@ -1,5 +1,13 @@
 import { combination } from "./combination";
 
+/**
+ * マリガンの期待値を計算します。
+ * @param deck - デッキ内の総カード数
+ * @param hand - 引く手札の枚数
+ * @param Artist - デッキ内のアーティストカードの枚数
+ * @returns マリガンの期待値
+ */
+
 export function calcExpMulligan(
   deck: number,
   hand: number,
@@ -30,12 +38,12 @@ export function calcExpMulligan(
 
   const noArtist = combination(deck - Artist, hand);
 
-  // ゼロ除算エラーを回避: existArtistが0の場合は0を返す
-  if (allHand === 0) {
+  const allMinusNo = allHand - noArtist;
+
+  // ゼロ除算エラーを回避: allMinusNoが0の場合は0を返す
+  if (allMinusNo === 0) {
     return 0;
   }
 
-  const allMinusNo = allHand - noArtist;
-
-  return (noArtist * allHand) / (allMinusNo * allMinusNo);
+  return noArtist / allMinusNo;
 }

@@ -89,14 +89,12 @@ const inputs = ref<{
   Artist: number | null;
   goodArtist: number | null;
   badArtist: number | null;
-  mulliganCount: number | null;
 }>({
   deck: 60,
   hand: 7,
   Artist: 4,
   goodArtist: 4,
   badArtist: 1,
-  mulliganCount: 1,
 });
 
 const result = ref<number | null>(null);

@@ -8,6 +8,14 @@ const memo: Map<string, number> = new Map();
  * @returns 組み合わせの数
  */
 export function combination(n: number, k: number): number {
+  // 入力が非負の整数であることを検証
+  if (!Number.isInteger(n) || n < 0) {
+    throw new Error("nは非負の整数である必要があります");
+  }
+  if (!Number.isInteger(k) || k < 0) {
+    throw new Error("kは非負の整数である必要があります");
+  }
+
   const key = `${n},${k}`;
   if (memo.has(key)) {
     return memo.get(key)!;
@@ -25,8 +33,9 @@ export function combination(n: number, k: number): number {
   }
 
   // k > n/2 の場合、計算を最適化するため k = n - k を使用
-  if (k > n / 2) {
-    k = n - k;
+  let actualK = k;
+  if (actualK > n / 2) {
+    actualK = n - actualK;
   }
 
   // 反復的にC(n, k) = n! / (k! * (n-k)!) を計算
@@ -37,6 +46,9 @@ export function combination(n: number, k: number): number {
   }
 
   const roundedResult = Math.round(result);
+  if (Math.abs(result - roundedResult) > 1e-10) {
+    console.warn(`組み合わせ計算で非整数の結果: ${result}`);
+  }
   memo.set(key, roundedResult);
   return roundedResult;
 }
