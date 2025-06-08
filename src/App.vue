@@ -67,7 +67,13 @@ const inputs = ref<{
 const result = ref<number | null>(null);
 const error = ref<string | null>(null);
 
-const formFields = [
+const formFields: {
+  id: string;
+  label: string;
+  modelKey: keyof typeof inputs.value;
+  type: string;
+  min: number;
+}[] = [
   { id: "deck", label: "デッキ枚数", modelKey: "deck", type: "number", min: 1 },
   { id: "hand", label: "手札枚数", modelKey: "hand", type: "number", min: 1 },
   {
