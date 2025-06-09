@@ -83,13 +83,15 @@ import { calcExpMulligan } from "./utils/calc_expected_mulligan";
 type Tab = "badHand" | "expMulligan";
 const activeTab = ref<Tab>("badHand");
 
-const inputs = ref<{
+type Inputs = {
   deck: number | null;
   hand: number | null;
   Artist: number | null;
   goodArtist: number | null;
   badArtist: number | null;
-}>({
+};
+
+const inputs = ref<Inputs>({
   deck: 60,
   hand: 7,
   Artist: 4,
@@ -108,7 +110,7 @@ watch(activeTab, () => {
 type FormField = {
   id: string;
   label: string;
-  modelKey: keyof typeof inputs.value;
+  modelKey: keyof Inputs;
   type: string;
   min: number;
 };
@@ -157,51 +159,39 @@ const calculate = () => {
   result.value = null;
 
   if (activeTab.value === "badHand") {
-    if (
-      inputs.value.deck === null ||
-      inputs.value.hand === null ||
-      inputs.value.goodArtist === null ||
-      inputs.value.badArtist === null
-    ) {
-      error.value = "すべての項目を入力してください";
-      return;
-    }
-
     const { deck, hand, goodArtist, badArtist } = inputs.value;
 
-    try {
-      result.value = calcBadHand(deck, hand, goodArtist, badArtist);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        error.value = err.message;
-      } else {
-        error.value = "計算中に不明なエラーが発生しました";
-      }
-      console.error(err);
-    }
-  } else {
-    // expMulligan
     if (
-      inputs.value.deck === null ||
-      inputs.value.hand === null ||
-      inputs.value.Artist === null
+      deck === null ||
+      hand === null ||
+      goodArtist === null ||
+      badArtist === null
     ) {
       error.value = "すべての項目を入力してください";
       return;
     }
 
+    const calcResult = calcBadHand(deck, hand, goodArtist, badArtist);
+    if (calcResult.isErr()) {
+      error.value = calcResult.error;
+      return;
+    }
+    result.value = calcResult.value;
+  } else {
+    // expMulligan
     const { deck, hand, Artist } = inputs.value;
 
-    try {
-      result.value = calcExpMulligan(deck, hand, Artist);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        error.value = err.message;
-      } else {
-        error.value = "計算中に不明なエラーが発生しました";
-      }
-      console.error(err);
+    if (deck === null || hand === null || Artist === null) {
+      error.value = "すべての項目を入力してください";
+      return;
     }
+
+    const calcResult = calcExpMulligan(deck, hand, Artist);
+    if (calcResult.isErr()) {
+      error.value = calcResult.error;
+      return;
+    }
+    result.value = calcResult.value;
   }
 };
 </script>
