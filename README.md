@@ -3,16 +3,27 @@
 ## 開発環境
 
 - Node.js v24.1.0
-- pnpm 10.11.1
+- pnpm v10.12.1
 
-## 開発サーバーの起動
+## インストールとセットアップ
 
-```bash
-git clone https://github.com/suika-lunch/waic-calculator.git
-cd waic-calculator
-pnpm i
-pnpm dev
-```
+1.  **リポジトリをクローンする**:
+
+    ```bash
+    git clone https://github.com/suika-lunch/waic-calculator.git
+    cd waic-calculator
+    ```
+
+2.  **依存関係をインストールする**:
+
+    ```bash
+    pnpm i
+    ```
+
+3.  **開発サーバーを起動する**:
+    ```bash
+    pnpm dev
+    ```
 
 ## 技術スタック
 
