@@ -1,21 +1,21 @@
 import { ok, err, type Result } from "neverthrow";
+import type { CombinationParams } from "../types/calculation";
+import { validateCombinationParams } from "./validation";
 
 const memo: Map<string, number> = new Map();
 
 /**
  * 組み合わせの数（nCk）を効率的に計算します。
  * メモ化を使用して、同じ計算が繰り返されるのを防ぎます。
- * @param n - 全体の要素数
- * @param k - 選ぶ要素の数
- * @returns 組み合わせの数、またはエラーメッセージ
+ * 関数型アプローチで実装し、バリデーションを分離しています。
  */
 export function combination(n: number, k: number): Result<number, string> {
-  // 入力が非負の整数であることを検証
-  if (!Number.isInteger(n) || n < 0) {
-    return err("nは非負の整数である必要があります");
-  }
-  if (!Number.isInteger(k) || k < 0) {
-    return err("kは非負の整数である必要があります");
+  const params: CombinationParams = { n, k };
+
+  // バリデーション（早期リターン）
+  const validationResult = validateCombinationParams(params);
+  if (validationResult.isErr()) {
+    return err(validationResult.error);
   }
 
   const key = `${n},${k}`;
