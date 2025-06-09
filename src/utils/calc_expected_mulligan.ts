@@ -13,9 +13,9 @@ import { validateExpectedMulliganParams } from "./validation";
 export function calcExpMulligan(
   deck: number,
   hand: number,
-  Artist: number
+  artist: number
 ): Result<CalculationCount, string> {
-  const params: ExpectedMulliganParams = { deck, hand, Artist };
+  const params: ExpectedMulliganParams = { deck, hand, artist };
 
   // バリデーション（早期リターン）
   const validationResult = validateExpectedMulliganParams(params);
@@ -29,7 +29,7 @@ export function calcExpMulligan(
   }
   const allHand = allHandResult.value;
 
-  const noArtistResult = combination(deck - Artist, hand);
+  const noArtistResult = combination(deck - artist, hand);
   if (noArtistResult.isErr()) {
     return err(noArtistResult.error);
   }

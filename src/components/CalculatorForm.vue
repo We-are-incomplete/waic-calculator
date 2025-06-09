@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useCalculatorStore } from "../stores/calculator";
+import type { BadHandInputs, ExpMulliganInputs } from "../stores/calculator";
 import {
   createBadHandFormFields,
   createExpMulliganFormFields,
@@ -71,13 +72,13 @@ const handleInputChange = (fieldKey: string, event: Event): void => {
   if (calculatorStore.activeTab === "badHand") {
     calculatorStore.updateBadHandInputs({
       [fieldKey]: value,
-    } as any);
+    } as Partial<BadHandInputs>);
     return;
   }
 
   calculatorStore.updateExpMulliganInputs({
     [fieldKey]: value,
-  } as any);
+  } as Partial<ExpMulliganInputs>);
 };
 
 const handleSubmit = (): void => {

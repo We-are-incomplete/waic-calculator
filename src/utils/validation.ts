@@ -23,7 +23,7 @@ export const validateBadHandParams = (
   const { deck, hand, goodArtist, badArtist } = params;
 
   // 個別バリデーション
-  const deckValidation = validateNonNegativeInteger(deck, "デッキ数");
+  const deckValidation = validateNonNegativeInteger(deck, "デッキ枚数");
   if (deckValidation.isErr()) {
     return err(deckValidation.error);
   }
@@ -65,7 +65,7 @@ export const validateBadHandParams = (
 export const validateExpectedMulliganParams = (
   params: ExpectedMulliganParams
 ): Result<ExpectedMulliganParams, string> => {
-  const { deck, hand, Artist } = params;
+  const { deck, hand, artist } = params;
 
   const deckValidation = validateNonNegativeInteger(deck, "デッキ枚数");
   if (deckValidation.isErr()) {
@@ -78,7 +78,7 @@ export const validateExpectedMulliganParams = (
   }
 
   const artistValidation = validateNonNegativeInteger(
-    Artist,
+    artist,
     "アーティスト枚数"
   );
   if (artistValidation.isErr()) {
@@ -89,7 +89,7 @@ export const validateExpectedMulliganParams = (
     return err("手札枚数はデッキ枚数以下にしてください。");
   }
 
-  if (Artist > deck) {
+  if (artist > deck) {
     return err("アーティストの枚数はデッキ枚数以下にしてください。");
   }
 
@@ -110,6 +110,10 @@ export const validateCombinationParams = (
   const kValidation = validateNonNegativeInteger(k, "k");
   if (kValidation.isErr()) {
     return err(kValidation.error);
+  }
+
+  if (k > n) {
+    return err("kはn以下である必要があります。");
   }
 
   return ok(params);

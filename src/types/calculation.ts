@@ -15,7 +15,7 @@ export type BadHandCalculationParams = {
 export type ExpectedMulliganParams = {
   readonly deck: DeckSize;
   readonly hand: HandSize;
-  readonly Artist: CardCount;
+  readonly artist: CardCount;
 };
 
 // 組み合わせ計算のパラメータ

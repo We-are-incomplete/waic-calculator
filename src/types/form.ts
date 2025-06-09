@@ -17,7 +17,7 @@ export type BadHandFormField = FormField<
 >;
 
 // マリガン期待値計算用のフォームフィールド
-export type ExpMulliganFormField = FormField<"deck" | "hand" | "Artist">;
+export type ExpMulliganFormField = FormField<"deck" | "hand" | "artist">;
 
 // フォームフィールド定義の関数
 export const createBadHandFormFields = (): readonly BadHandFormField[] =>
@@ -76,9 +76,9 @@ export const createExpMulliganFormFields =
         required: true,
       },
       {
-        id: "Artist",
+        id: "artist",
         label: "Artistの枚数",
-        modelKey: "Artist",
+        modelKey: "artist",
         type: "number",
         min: 0,
         required: true,

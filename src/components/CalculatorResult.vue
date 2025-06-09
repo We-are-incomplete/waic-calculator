@@ -1,25 +1,18 @@
 <template>
   <div>
     <!-- 成功時の結果表示 -->
-    <div
-      v-if="calculatorStore.hasResult && calculatorStore.result"
-      class="mt-6 p-4 bg-blue-50 rounded-md"
-    >
+    <div v-if="safeResult" class="mt-6 p-4 bg-blue-50 rounded-md">
       <h3 class="text-lg font-semibold text-gray-800 mb-2">計算結果</h3>
       <p class="text-2xl font-bold text-blue-600">
-        {{ formatResultValue(calculatorStore.result.value)
-        }}{{ calculatorStore.result.unit }}
+        {{ formatResultValue(safeResult.value) }}{{ safeResult.unit }}
       </p>
       <p class="text-sm text-gray-600 mt-1">
-        {{ calculatorStore.result.description }}
+        {{ safeResult.description }}
       </p>
     </div>
 
     <!-- エラー時の表示 -->
-    <div
-      v-if="calculatorStore.hasError && calculatorStore.error"
-      class="mt-6 p-4 bg-red-50 rounded-md"
-    >
+    <div v-if="safeError" class="mt-6 p-4 bg-red-50 rounded-md">
       <div class="flex items-center">
         <svg
           class="w-5 h-5 text-red-400 mr-2"
@@ -34,7 +27,7 @@
         </svg>
         <p class="text-red-600 font-medium">エラー</p>
       </div>
-      <p class="text-red-700 mt-2">{{ calculatorStore.error.message }}</p>
+      <p class="text-red-700 mt-2">{{ safeError.message }}</p>
     </div>
 
     <!-- 計算中の表示 -->
@@ -70,9 +63,26 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useCalculatorStore } from "../stores/calculator";
 
 const calculatorStore = useCalculatorStore();
+
+// 型安全な計算結果の取得
+const safeResult = computed(() => {
+  if (calculatorStore.hasResult && calculatorStore.result) {
+    return calculatorStore.result;
+  }
+  return null;
+});
+
+// 型安全なエラーの取得
+const safeError = computed(() => {
+  if (calculatorStore.hasError && calculatorStore.error) {
+    return calculatorStore.error;
+  }
+  return null;
+});
 
 // 結果値のフォーマット（純粋関数）
 const formatResultValue = (value: number): string => {

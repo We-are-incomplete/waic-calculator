@@ -16,7 +16,7 @@ export type BadHandInputs = {
 export type ExpMulliganInputs = {
   deck: number;
   hand: number;
-  Artist: number;
+  artist: number;
 };
 
 export type CalculationResult = {
@@ -51,7 +51,7 @@ export const useCalculatorStore = defineStore("calculator", () => {
   const expMulliganInputs = ref<ExpMulliganInputs>({
     deck: 60,
     hand: 7,
-    Artist: 4,
+    artist: 4,
   });
 
   // 計算された状態
@@ -118,8 +118,8 @@ export const useCalculatorStore = defineStore("calculator", () => {
   const calculateExpMulligan = (): void => {
     calculationState.value = { type: "calculating" };
 
-    const { deck, hand, Artist } = expMulliganInputs.value;
-    const result = calcExpMulligan(deck, hand, Artist);
+    const { deck, hand, artist } = expMulliganInputs.value;
+    const result = calcExpMulligan(deck, hand, artist);
 
     if (result.isErr()) {
       calculationState.value = {
