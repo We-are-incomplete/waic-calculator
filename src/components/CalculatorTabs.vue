@@ -12,7 +12,7 @@
         :aria-selected="calculatorStore.activeTab === tab.id"
         :tabindex="calculatorStore.activeTab === tab.id ? 0 : -1"
         role="tab"
-        class="relative flex-1 py-2 px-3 text-sm font-medium text-center rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+        class="relative flex-1 py-2 px-3 text-sm font-medium text-center rounded-md transition-all duration-200"
         :class="[
           calculatorStore.activeTab === tab.id
             ? 'bg-white text-blue-600 shadow-sm'
@@ -29,32 +29,10 @@
         ></div>
       </button>
     </div>
-
-    <!-- タブの説明 -->
-    <Transition
-      name="description"
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 transform translate-y-2"
-      enter-to-class="opacity-100 transform translate-y-0"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 transform translate-y-0"
-      leave-to-class="opacity-0 transform translate-y-2"
-      mode="out-in"
-    >
-      <div
-        :key="calculatorStore.activeTab"
-        class="mt-3 p-3 bg-blue-50 rounded-md border border-blue-100"
-      >
-        <p class="text-sm text-blue-700">
-          {{ currentTabDescription }}
-        </p>
-      </div>
-    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { useEventListener } from "@vueuse/core";
 import { useCalculatorStore, type CalculatorTab } from "../stores/calculator";
 
@@ -64,29 +42,18 @@ const calculatorStore = useCalculatorStore();
 interface Tab {
   id: CalculatorTab;
   label: string;
-  description: string;
 }
 
 const tabs: Tab[] = [
   {
     id: "badHand",
     label: "事故率計算",
-    description:
-      "デッキから特定の組み合わせのカードを引く確率（事故率）を計算します。",
   },
   {
     id: "expMulligan",
     label: "マリガン期待値",
-    description:
-      "目標のカードを引くまでにかかるマリガン回数の期待値を計算します。",
   },
 ];
-
-// 現在のタブの説明
-const currentTabDescription = computed(() => {
-  const currentTab = tabs.find((tab) => tab.id === calculatorStore.activeTab);
-  return currentTab?.description || "";
-});
 
 // タブの切り替え
 const setActiveTab = (tabId: CalculatorTab): void => {

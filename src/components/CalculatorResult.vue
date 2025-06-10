@@ -15,54 +15,6 @@
       >
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-green-800">計算結果</h3>
-          <button
-            @click="copyToClipboard"
-            :disabled="!isClipboardSupported || isCopying"
-            class="flex items-center gap-2 px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            :title="
-              isClipboardSupported
-                ? 'クリップボードにコピー'
-                : 'お使いのブラウザはクリップボード機能をサポートしていません'
-            "
-          >
-            <svg
-              v-if="!isCopying && !isJustCopied"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-              />
-            </svg>
-            <svg
-              v-else-if="isJustCopied"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            <div
-              v-else
-              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
-            ></div>
-            <span v-if="isJustCopied">コピー済み</span>
-            <span v-else-if="isCopying">コピー中...</span>
-            <span v-else>コピー</span>
-          </button>
         </div>
 
         <div class="space-y-4">
@@ -80,16 +32,6 @@
                 {{ formattedValue }}
               </span>
               <span class="text-lg text-green-600">{{ result.unit }}</span>
-            </div>
-          </div>
-
-          <div class="text-sm text-gray-600 bg-white bg-opacity-50 rounded p-3">
-            <p class="mb-2"><strong>計算パラメータ:</strong></p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <div v-for="param in currentParameters" :key="param.label">
-                <span class="font-medium">{{ param.label }}:</span>
-                <span class="ml-1 tabular-nums">{{ param.value }}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -147,16 +89,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useClipboard } from "@vueuse/core";
+import { computed } from "vue";
 import { useCalculatorStore } from "../stores/calculator";
 
 const calculatorStore = useCalculatorStore();
-
-// クリップボード機能
-const { isSupported: isClipboardSupported, copy } = useClipboard();
-const isCopying = ref(false);
-const isJustCopied = ref(false);
 
 // 結果とエラーの取得
 const result = computed(() => calculatorStore.result);
@@ -177,56 +113,4 @@ const formattedValue = computed(() => {
     return Number(value.toFixed(3)).toLocaleString();
   }
 });
-
-// 現在のパラメータを表示用に整形
-const currentParameters = computed(() => {
-  if (calculatorStore.activeTab === "badHand") {
-    const inputs = calculatorStore.badHandInputs;
-    return [
-      { label: "デッキ枚数", value: inputs.deck },
-      { label: "初期手札枚数", value: inputs.hand },
-      { label: "良いカード枚数", value: inputs.goodArtist },
-      { label: "悪いカード枚数", value: inputs.badArtist },
-    ];
-  } else {
-    const inputs = calculatorStore.expMulliganInputs;
-    return [
-      { label: "デッキ枚数", value: inputs.deck },
-      { label: "初期手札枚数", value: inputs.hand },
-      { label: "対象カード枚数", value: inputs.artist },
-    ];
-  }
-});
-
-// クリップボードにコピー
-const copyToClipboard = async (): Promise<void> => {
-  if (!result.value || !isClipboardSupported.value || isCopying.value) {
-    return;
-  }
-
-  isCopying.value = true;
-
-  try {
-    const copyText = `${result.value.description}: ${formattedValue.value}${
-      result.value.unit
-    }
-
-計算パラメータ:
-${currentParameters.value
-  .map((param) => `${param.label}: ${param.value}`)
-  .join("\n")}`;
-
-    await copy(copyText);
-    isJustCopied.value = true;
-
-    // 2秒後にコピー状態をリセット
-    setTimeout(() => {
-      isJustCopied.value = false;
-    }, 2000);
-  } catch (error) {
-    console.error("クリップボードへのコピーに失敗しました:", error);
-  } finally {
-    isCopying.value = false;
-  }
-};
 </script>
