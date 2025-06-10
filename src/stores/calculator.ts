@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, readonly } from "vue";
+import { useStorage, useCloned } from "@vueuse/core";
 import { calcBadHand } from "../utils/calc_bad_hand";
 import { calcExpMulligan } from "../utils/calc_expected_mulligan";
 
@@ -35,26 +36,39 @@ export type CalculationState =
   | { type: "success"; result: CalculationResult }
   | { type: "error"; error: CalculationError };
 
-// Pinia ストアの定義
+// デフォルト値
+const DEFAULT_BAD_HAND_INPUTS: BadHandInputs = {
+  deck: 60,
+  hand: 7,
+  goodArtist: 4,
+  badArtist: 1,
+};
+
+const DEFAULT_EXP_MULLIGAN_INPUTS: ExpMulliganInputs = {
+  deck: 60,
+  hand: 7,
+  artist: 4,
+};
+
+// Pinia ストアの定義（Setup API Style）
 export const useCalculatorStore = defineStore("calculator", () => {
-  // 状態
-  const activeTab = ref<CalculatorTab>("badHand");
+  // 永続化された状態（VueUseのuseStorageを使用）
+  const activeTab = useStorage<CalculatorTab>("calculator-tab", "badHand");
+
+  const badHandInputs = useStorage<BadHandInputs>(
+    "calculator-bad-hand-inputs",
+    DEFAULT_BAD_HAND_INPUTS
+  );
+
+  const expMulliganInputs = useStorage<ExpMulliganInputs>(
+    "calculator-exp-mulligan-inputs",
+    DEFAULT_EXP_MULLIGAN_INPUTS
+  );
+
+  // 計算状態（セッション中のみ保持）
   const calculationState = ref<CalculationState>({ type: "idle" });
 
-  const badHandInputs = ref<BadHandInputs>({
-    deck: 60,
-    hand: 7,
-    goodArtist: 4,
-    badArtist: 1,
-  });
-
-  const expMulliganInputs = ref<ExpMulliganInputs>({
-    deck: 60,
-    hand: 7,
-    artist: 4,
-  });
-
-  // 計算された状態
+  // 計算された状態（computed refs）
   const isCalculating = computed(
     () => calculationState.value.type === "calculating"
   );
@@ -73,6 +87,14 @@ export const useCalculatorStore = defineStore("calculator", () => {
       return calculationState.value.error;
     }
     return null;
+  });
+
+  // 現在のタブに対応する入力値を取得
+  const currentInputs = computed(() => {
+    if (activeTab.value === "badHand") {
+      return badHandInputs.value;
+    }
+    return expMulliganInputs.value;
   });
 
   // アクション（純粋関数として実装）
@@ -155,12 +177,28 @@ export const useCalculatorStore = defineStore("calculator", () => {
     calculationState.value = { type: "idle" };
   };
 
+  // 入力値を初期状態にリセット
+  const resetInputs = (): void => {
+    if (activeTab.value === "badHand") {
+      badHandInputs.value = { ...DEFAULT_BAD_HAND_INPUTS };
+    } else {
+      expMulliganInputs.value = { ...DEFAULT_EXP_MULLIGAN_INPUTS };
+    }
+    calculationState.value = { type: "idle" };
+  };
+
+  // 現在の入力値のクローンを取得（VueUseのuseClonedを活用）
+  const { cloned: inputsClone, sync: syncInputsClone } =
+    useCloned(currentInputs);
+
   return {
-    // 状態
+    // 状態（読み取り専用）
     activeTab: readonly(activeTab),
     calculationState: readonly(calculationState),
     badHandInputs: readonly(badHandInputs),
     expMulliganInputs: readonly(expMulliganInputs),
+    currentInputs: readonly(currentInputs),
+    inputsClone: readonly(inputsClone),
 
     // 計算された状態
     isCalculating,
@@ -175,5 +213,7 @@ export const useCalculatorStore = defineStore("calculator", () => {
     updateExpMulliganInputs,
     calculate,
     resetCalculation,
+    resetInputs,
+    syncInputsClone,
   };
 });

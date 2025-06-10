@@ -1,48 +1,141 @@
 <template>
-  <div class="flex justify-center mb-6">
-    <button
-      @click="handleTabChange('badHand')"
-      :class="getTabButtonClass('badHand')"
+  <div class="mb-6">
+    <div
+      class="flex space-x-1 p-1 bg-gray-100 rounded-lg"
+      role="tablist"
+      @keydown="handleKeydown"
     >
-      初手事故率
-    </button>
-    <button
-      @click="handleTabChange('expMulligan')"
-      :class="getTabButtonClass('expMulligan')"
+      <button
+        v-for="tab in tabs"
+        :key="tab.id"
+        @click="setActiveTab(tab.id)"
+        :aria-selected="calculatorStore.activeTab === tab.id"
+        :tabindex="calculatorStore.activeTab === tab.id ? 0 : -1"
+        role="tab"
+        class="relative flex-1 py-2 px-3 text-sm font-medium text-center rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+        :class="[
+          calculatorStore.activeTab === tab.id
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
+        ]"
+      >
+        <span class="relative z-10">{{ tab.label }}</span>
+
+        <!-- アクティブタブのインジケーター -->
+        <div
+          v-if="calculatorStore.activeTab === tab.id"
+          class="absolute inset-0 bg-white rounded-md shadow-sm transition-all duration-200"
+          style="z-index: 1"
+        ></div>
+      </button>
+    </div>
+
+    <!-- タブの説明 -->
+    <Transition
+      name="description"
+      enter-active-class="transition-all duration-300 ease-out"
+      enter-from-class="opacity-0 transform translate-y-2"
+      enter-to-class="opacity-100 transform translate-y-0"
+      leave-active-class="transition-all duration-200 ease-in"
+      leave-from-class="opacity-100 transform translate-y-0"
+      leave-to-class="opacity-0 transform translate-y-2"
+      mode="out-in"
     >
-      マリガン期待値
-    </button>
+      <div
+        :key="calculatorStore.activeTab"
+        class="mt-3 p-3 bg-blue-50 rounded-md border border-blue-100"
+      >
+        <p class="text-sm text-blue-700">
+          {{ currentTabDescription }}
+        </p>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { useEventListener } from "@vueuse/core";
 import { useCalculatorStore, type CalculatorTab } from "../stores/calculator";
 
 const calculatorStore = useCalculatorStore();
 
-// 早期リターンパターンを使用したクラス計算
-const getTabButtonClass = (tab: CalculatorTab): string => {
-  const baseClasses =
-    "px-4 py-2 text-sm font-medium transition-colors duration-200";
-  const isActive = calculatorStore.activeTab === tab;
+// タブの定義
+interface Tab {
+  id: CalculatorTab;
+  label: string;
+  description: string;
+}
 
-  if (tab === "badHand") {
-    const roundedClass = "rounded-l-md";
-    if (isActive) {
-      return `${baseClasses} ${roundedClass} bg-blue-600 text-white`;
+const tabs: Tab[] = [
+  {
+    id: "badHand",
+    label: "事故率計算",
+    description:
+      "デッキから特定の組み合わせのカードを引く確率（事故率）を計算します。",
+  },
+  {
+    id: "expMulligan",
+    label: "マリガン期待値",
+    description:
+      "目標のカードを引くまでにかかるマリガン回数の期待値を計算します。",
+  },
+];
+
+// 現在のタブの説明
+const currentTabDescription = computed(() => {
+  const currentTab = tabs.find((tab) => tab.id === calculatorStore.activeTab);
+  return currentTab?.description || "";
+});
+
+// タブの切り替え
+const setActiveTab = (tabId: CalculatorTab): void => {
+  calculatorStore.setActiveTab(tabId);
+};
+
+// キーボードナビゲーション
+const handleKeydown = (event: KeyboardEvent): void => {
+  const currentIndex = tabs.findIndex(
+    (tab) => tab.id === calculatorStore.activeTab
+  );
+
+  let newIndex = currentIndex;
+
+  switch (event.key) {
+    case "ArrowLeft":
+      event.preventDefault();
+      newIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+      break;
+    case "ArrowRight":
+      event.preventDefault();
+      newIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+      break;
+    case "Home":
+      event.preventDefault();
+      newIndex = 0;
+      break;
+    case "End":
+      event.preventDefault();
+      newIndex = tabs.length - 1;
+      break;
+    default:
+      return;
+  }
+
+  if (newIndex !== currentIndex) {
+    setActiveTab(tabs[newIndex].id);
+  }
+};
+
+// 数字キーでタブ切り替え
+useEventListener("keydown", (event: KeyboardEvent) => {
+  // Alt + 数字キーでタブ切り替え
+  if (event.altKey && !event.ctrlKey && !event.metaKey) {
+    const keyNum = parseInt(event.key);
+    if (keyNum >= 1 && keyNum <= tabs.length) {
+      event.preventDefault();
+      setActiveTab(tabs[keyNum - 1].id);
     }
-    return `${baseClasses} ${roundedClass} bg-gray-200 text-gray-700 hover:bg-gray-300`;
   }
-
-  // expMulligan tab
-  const roundedClass = "rounded-r-md";
-  if (isActive) {
-    return `${baseClasses} ${roundedClass} bg-blue-600 text-white`;
-  }
-  return `${baseClasses} ${roundedClass} bg-gray-200 text-gray-700 hover:bg-gray-300`;
-};
-
-const handleTabChange = (tab: CalculatorTab): void => {
-  calculatorStore.setActiveTab(tab);
-};
+});
 </script>
