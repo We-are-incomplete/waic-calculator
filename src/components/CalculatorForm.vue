@@ -9,7 +9,7 @@
       </label>
       <input
         :id="field.id"
-        :ref="(el) => setFieldRef(el as HTMLInputElement, field.id)"
+        :ref="(el) => setFieldRef(el, field.id)"
         :value="getFieldValue(field.modelKey)"
         @input="handleInputChange(field.modelKey, $event)"
         :type="field.type"
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick } from "vue";
+import { computed, ref, type ComponentPublicInstance } from "vue";
 import { useEventListener } from "@vueuse/core";
 import { useCalculatorStore } from "../stores/calculator";
 import type { BadHandInputs, ExpMulliganInputs } from "../stores/calculator";
@@ -48,8 +48,11 @@ const calculatorStore = useCalculatorStore();
 // フィールド参照を管理するためのコンポジット
 const fieldRefs = ref<Record<string, HTMLInputElement>>({});
 
-const setFieldRef = (el: HTMLInputElement | null, id: string) => {
-  if (el) {
+const setFieldRef = (
+  el: Element | ComponentPublicInstance | null,
+  id: string
+) => {
+  if (el instanceof HTMLInputElement) {
     fieldRefs.value[id] = el;
   } else {
     delete fieldRefs.value[id];
@@ -101,32 +104,13 @@ const handleSubmit = (): void => {
   calculatorStore.calculate();
 };
 
-const handleReset = async (): Promise<void> => {
-  calculatorStore.resetInputs();
-
-  // リセット後に最初のフィールドにフォーカス
-  await nextTick();
-  const firstField = currentFormFields.value[0];
-  if (firstField && fieldRefs.value[firstField.id]) {
-    fieldRefs.value[firstField.id].focus();
-  }
-};
-
 // キーボードショートカット
 useEventListener("keydown", (event: KeyboardEvent) => {
-  // Ctrl+Enter で計算実行
-  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+  // Enter で計算実行
+  if (event.key === "Enter") {
     event.preventDefault();
     if (!calculatorStore.isCalculating) {
       handleSubmit();
-    }
-  }
-
-  // Ctrl+R でリセット
-  if ((event.ctrlKey || event.metaKey) && event.key === "r") {
-    event.preventDefault();
-    if (!calculatorStore.isCalculating) {
-      handleReset();
     }
   }
 });

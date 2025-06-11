@@ -109,8 +109,8 @@ const formattedValue = computed(() => {
     // 整数の場合
     return value.toLocaleString();
   } else {
-    // 小数の場合、有効桁数を考慮
-    return Number(value.toFixed(3)).toLocaleString();
+    // 小数の場合、3桁まで表示（末尾の0も保持）
+    return value.toFixed(3);
   }
 });
 </script>
