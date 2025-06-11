@@ -31,3 +31,22 @@
 - Vite
 - TypeScript
 - Tailwind CSS
+
+## 開発コマンド
+
+```bash
+# 開発サーバー起動
+pnpm dev
+
+# ビルド
+pnpm build
+
+# プレビュー
+pnpm preview
+
+# リンター実行
+pnpm oxlint
+
+# テスト実行
+pnpm test
+```
