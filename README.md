@@ -2,8 +2,8 @@
 
 ## 開発環境
 
-- Node.js v24.1.0
-- pnpm v10.12.1
+- Node.js v24.4.0
+- pnpm v10.13.1
 
 ## インストールとセットアップ
 
@@ -31,22 +31,3 @@
 - Vite
 - TypeScript
 - Tailwind CSS
-
-## 開発コマンド
-
-```bash
-# 開発サーバー起動
-pnpm dev
-
-# ビルド
-pnpm build
-
-# プレビュー
-pnpm preview
-
-# リンター実行
-pnpm oxlint
-
-# テスト実行
-pnpm test
-```

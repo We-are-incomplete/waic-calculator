@@ -63,7 +63,7 @@ const setActiveTab = (tabId: CalculatorTab): void => {
 // キーボードナビゲーション
 const handleKeydown = (event: KeyboardEvent): void => {
   const currentIndex = tabs.findIndex(
-    (tab) => tab.id === calculatorStore.activeTab
+    (tab) => tab.id === calculatorStore.activeTab,
   );
 
   let newIndex = currentIndex;
