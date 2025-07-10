@@ -8,7 +8,7 @@ import type {
 // 基本的な数値バリデーション
 const validateNonNegativeInteger = (
   value: number,
-  fieldName: string
+  fieldName: string,
 ): Result<number, string> => {
   if (!Number.isInteger(value) || value < 0) {
     return err(`${fieldName}は非負の整数である必要があります。`);
@@ -18,7 +18,7 @@ const validateNonNegativeInteger = (
 
 // 初手事故率計算のバリデーション
 export const validateBadHandParams = (
-  params: BadHandCalculationParams
+  params: BadHandCalculationParams,
 ): Result<BadHandCalculationParams, string> => {
   const { deck, hand, goodArtist, badArtist } = params;
 
@@ -35,7 +35,7 @@ export const validateBadHandParams = (
 
   const goodArtistValidation = validateNonNegativeInteger(
     goodArtist,
-    "良いアーティスト数"
+    "良いアーティスト数",
   );
   if (goodArtistValidation.isErr()) {
     return err(goodArtistValidation.error);
@@ -43,7 +43,7 @@ export const validateBadHandParams = (
 
   const badArtistValidation = validateNonNegativeInteger(
     badArtist,
-    "悪いアーティスト数"
+    "悪いアーティスト数",
   );
   if (badArtistValidation.isErr()) {
     return err(badArtistValidation.error);
@@ -63,7 +63,7 @@ export const validateBadHandParams = (
 
 // マリガン期待値計算のバリデーション
 export const validateExpectedMulliganParams = (
-  params: ExpectedMulliganParams
+  params: ExpectedMulliganParams,
 ): Result<ExpectedMulliganParams, string> => {
   const { deck, hand, artist } = params;
 
@@ -79,7 +79,7 @@ export const validateExpectedMulliganParams = (
 
   const artistValidation = validateNonNegativeInteger(
     artist,
-    "アーティスト枚数"
+    "アーティスト枚数",
   );
   if (artistValidation.isErr()) {
     return err(artistValidation.error);
@@ -98,7 +98,7 @@ export const validateExpectedMulliganParams = (
 
 // 組み合わせ計算のバリデーション
 export const validateCombinationParams = (
-  params: CombinationParams
+  params: CombinationParams,
 ): Result<CombinationParams, string> => {
   const { n, k } = params;
 

@@ -13,7 +13,7 @@ import { validateExpectedMulliganParams } from "./validation";
 export function calcExpMulligan(
   deck: number,
   hand: number,
-  artist: number
+  artist: number,
 ): Result<CalculationCount, string> {
   const params: ExpectedMulliganParams = { deck, hand, artist };
 

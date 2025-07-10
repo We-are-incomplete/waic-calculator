@@ -57,12 +57,12 @@ export const useCalculatorStore = defineStore("calculator", () => {
 
   const badHandInputs = useStorage<BadHandInputs>(
     "calculator-bad-hand-inputs",
-    DEFAULT_BAD_HAND_INPUTS
+    DEFAULT_BAD_HAND_INPUTS,
   );
 
   const expMulliganInputs = useStorage<ExpMulliganInputs>(
     "calculator-exp-mulligan-inputs",
-    DEFAULT_EXP_MULLIGAN_INPUTS
+    DEFAULT_EXP_MULLIGAN_INPUTS,
   );
 
   // 計算状態（セッション中のみ保持）
@@ -70,7 +70,7 @@ export const useCalculatorStore = defineStore("calculator", () => {
 
   // 計算された状態（computed refs）
   const isCalculating = computed(
-    () => calculationState.value.type === "calculating"
+    () => calculationState.value.type === "calculating",
   );
   const hasResult = computed(() => calculationState.value.type === "success");
   const hasError = computed(() => calculationState.value.type === "error");
@@ -108,7 +108,7 @@ export const useCalculatorStore = defineStore("calculator", () => {
   };
 
   const updateExpMulliganInputs = (
-    inputs: Partial<ExpMulliganInputs>
+    inputs: Partial<ExpMulliganInputs>,
   ): void => {
     expMulliganInputs.value = { ...expMulliganInputs.value, ...inputs };
   };

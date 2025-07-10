@@ -50,7 +50,7 @@ const fieldRefs = ref<Record<string, HTMLInputElement>>({});
 
 const setFieldRef = (
   el: Element | ComponentPublicInstance | null,
-  id: string
+  id: string,
 ) => {
   if (el instanceof HTMLInputElement) {
     fieldRefs.value[id] = el;

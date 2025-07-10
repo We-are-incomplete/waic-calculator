@@ -14,7 +14,7 @@ export function calcBadHand(
   deck: number,
   hand: number,
   goodArtist: number,
-  badArtist: number
+  badArtist: number,
 ): Result<CalculationPercentage, string> {
   const params: BadHandCalculationParams = {
     deck,
