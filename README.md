@@ -1,33 +1,46 @@
 # Waic Calculator
 
-## 開発環境
+## 技術スタック
 
-- Node.js v24.4.0
-- pnpm v10.13.1
+- **フロントエンド**: Vue.js (TypeScript)
+- **ビルドツール**: Vite
+- **パッケージマネージャー**: pnpm
 
-## インストールとセットアップ
+## 開発環境のセットアップ
 
-1.  **リポジトリをクローンする**:
-
+1.  リポジトリのクローン
     ```bash
     git clone https://github.com/suika-lunch/waic-calculator.git
     cd waic-calculator
     ```
-
-2.  **依存関係をインストールする**:
-
+2.  依存関係のインストール
     ```bash
-    pnpm i
+    pnpm install
     ```
 
-3.  **開発サーバーを起動する**:
-    ```bash
-    pnpm dev
-    ```
+## 開発コマンド
 
-## 技術スタック
-
-- Vue.js
-- Vite
-- TypeScript
-- Tailwind CSS
+- **Linterの実行**:
+  ```bash
+  pnpm lint
+  ```
+- **Formatterの実行**:
+  ```bash
+  pnpm format
+  ```
+- **テストの実行**:
+  ```bash
+  pnpm test
+  ```
+- **開発サーバーの起動**:
+  ```bash
+  pnpm dev
+  ```
+- **アプリケーションのビルド**:
+  ```bash
+  pnpm build
+  ```
+- **ビルドされたアプリケーションのプレビュー**:
+  ```bash
+  pnpm preview
+  ```
