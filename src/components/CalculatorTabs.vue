@@ -90,7 +90,7 @@ const handleKeydown = (event: KeyboardEvent): void => {
   }
 
   if (newIndex !== currentIndex) {
-    setActiveTab(tabs[newIndex].id);
+    setActiveTab(tabs[newIndex]!.id);
   }
 };
 
@@ -101,7 +101,7 @@ useEventListener("keydown", (event: KeyboardEvent) => {
     const keyNum = parseInt(event.key);
     if (keyNum >= 1 && keyNum <= tabs.length) {
       event.preventDefault();
-      setActiveTab(tabs[keyNum - 1].id);
+      setActiveTab(tabs[keyNum - 1]!.id);
     }
   }
 });
