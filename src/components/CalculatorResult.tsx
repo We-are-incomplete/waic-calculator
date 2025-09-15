@@ -19,6 +19,10 @@ const CalculatorResult: React.FC = () => {
 
     const value = result.value;
 
+    if (!Number.isFinite(value)) {
+      return "-";
+    }
+
     // 小数点以下の桁数を適切に調整
     if (value % 1 === 0) {
       // 整数の場合
@@ -34,8 +38,9 @@ const CalculatorResult: React.FC = () => {
       {/* 結果表示 */}
       {hasResult && result && (
         <div
-          className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 shadow-lg
-                     transition-all duration-300 ease-out opacity-100 transform scale-100"
+          role="status"
+          aria-live="polite"
+          className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 shadow-lg transition-all duration-300 ease-out opacity-100 transform scale-100"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-green-800">計算結果</h3>
@@ -60,8 +65,8 @@ const CalculatorResult: React.FC = () => {
       {/* エラー表示 */}
       {hasError && error && (
         <div
-          className="bg-red-50 border border-red-200 rounded-lg p-6 shadow-lg
-                     transition-all duration-300 ease-out opacity-100 transform scale-100"
+          role="alert"
+          className="bg-red-50 border border-red-200 rounded-lg p-6 shadow-lg transition-all duration-300 ease-out opacity-100 transform scale-100"
         >
           <div className="flex items-center gap-3">
             <svg
@@ -89,8 +94,10 @@ const CalculatorResult: React.FC = () => {
       {/* 計算中表示 */}
       {isCalculating && (
         <div
-          className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-lg
-                     transition-all duration-300 ease-out opacity-100 transform scale-100"
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+          className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-lg transition-all duration-300 ease-out opacity-100 transform scale-100"
         >
           <div className="flex items-center gap-3">
             <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>

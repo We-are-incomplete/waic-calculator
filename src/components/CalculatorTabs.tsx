@@ -24,7 +24,8 @@ const tabs: Tab[] = [
 ];
 
 const CalculatorTabs: React.FC = () => {
-  const { activeTab, setActiveTab } = useCalculatorStore();
+  const activeTab = useCalculatorStore((s) => s.activeTab);
+  const setActiveTab = useCalculatorStore((s) => s.setActiveTab);
   const tabListRef = useRef<HTMLDivElement>(null);
 
   // タブの切り替え
@@ -77,6 +78,13 @@ const CalculatorTabs: React.FC = () => {
   // Alt + 数字キーでタブ切り替え
   useEffect(() => {
     const handleGlobalKeydown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.isContentEditable || target.closest("input, textarea, select"))
+      ) {
+        return;
+      }
       if (event.altKey && !event.ctrlKey && !event.metaKey) {
         const keyNum = parseInt(event.key);
         if (keyNum >= 1 && keyNum <= tabs.length) {
@@ -97,6 +105,7 @@ const CalculatorTabs: React.FC = () => {
       <div
         className="flex space-x-1 p-1 bg-gray-100 rounded-lg"
         role="tablist"
+        aria-orientation="horizontal"
         onKeyDown={handleKeydown}
         ref={tabListRef}
       >

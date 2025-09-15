@@ -1,10 +1,9 @@
-import React from "react";
 import CalculatorTabs from "./components/CalculatorTabs";
 import CalculatorForm from "./components/CalculatorForm";
 import CalculatorResult from "./components/CalculatorResult";
 import "./style.css";
 
-const App: React.FC = () => {
+function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
       <div className="max-w-md m-auto bg-white rounded-lg shadow-lg p-6">
@@ -14,6 +13,6 @@ const App: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;

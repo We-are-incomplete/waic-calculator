@@ -17,3 +17,11 @@
     ```bash
     bun install
     ```
+
+### 開発
+
+```bash
+bun start   # 開発サーバ (Vite)
+bun run build   # 本番ビルド
+bun preview # ローカルでビルド成果物を確認
+```

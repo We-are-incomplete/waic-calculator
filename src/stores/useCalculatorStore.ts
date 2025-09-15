@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { calcBadHand } from "../utils/calc_bad_hand";
 import { calcExpMulligan } from "../utils/calc_expected_mulligan";
+import type { Result } from "neverthrow";
 
 // 代数的データ型の定義 (既存のものをそのまま利用)
 export type CalculatorTab = "badHand" | "expMulligan";
@@ -55,8 +56,6 @@ interface CalculatorStore {
   badHandInputs: BadHandInputs;
   expMulliganInputs: ExpMulliganInputs;
   calculationState: CalculationState;
-  // currentInputsはgetterとして定義するため、インターフェースからは削除
-  // isCalculating, hasResult, hasError, result, error は calculationState から派生するため削除
 
   setActiveTab: (tab: CalculatorTab) => void;
   updateBadHandInputs: (inputs: Partial<BadHandInputs>) => void;
@@ -71,7 +70,7 @@ export const useCalculatorStore = create<CalculatorStore>()(
     (set, get) => {
       // ヘルパー関数: 計算結果を処理し、状態を更新
       const handleCalculationResult = (
-        result: ReturnType<typeof calcBadHand | typeof calcExpMulligan>,
+        result: Result<number, string>,
         successDescription: string,
         unit: string,
       ) => {
@@ -106,15 +105,6 @@ export const useCalculatorStore = create<CalculatorStore>()(
         // 永続化されない状態
         calculationState: { type: "idle" },
 
-        // 算出プロパティ (getterを使ってリアルタイムに計算)
-        get currentInputs() {
-          const state = get();
-          if (state.activeTab === "badHand") {
-            return state.badHandInputs;
-          }
-          return state.expMulliganInputs;
-        },
-
         // アクション
         setActiveTab: (tab) => {
           set({ activeTab: tab, calculationState: { type: "idle" } });
@@ -137,29 +127,39 @@ export const useCalculatorStore = create<CalculatorStore>()(
             const { deck, hand, goodArtist, badArtist } = state.badHandInputs;
             const result = calcBadHand(deck, hand, goodArtist, badArtist);
             handleCalculationResult(result, "事故率", "%");
-          } else if (state.activeTab === "expMulligan") {
-            const { deck, hand, artist } = state.expMulliganInputs;
-            const result = calcExpMulligan(deck, hand, artist);
-            handleCalculationResult(result, "マリガン期待値", "回");
+            return;
           }
+          // expMulligan
+          const { deck, hand, artist } = state.expMulliganInputs;
+          const result = calcExpMulligan(deck, hand, artist);
+          handleCalculationResult(result, "マリガン期待値", "回");
         },
         resetCalculation: () => {
           set({ calculationState: { type: "idle" } });
         },
         resetInputs: () => {
           const state = get();
-          if (state.activeTab === "badHand") {
-            set({ badHandInputs: { ...DEFAULT_BAD_HAND_INPUTS } });
-          } else {
-            set({ expMulliganInputs: { ...DEFAULT_EXP_MULLIGAN_INPUTS } });
-          }
-          set({ calculationState: { type: "idle" } });
+          set(
+            state.activeTab === "badHand"
+              ? {
+                  badHandInputs: { ...DEFAULT_BAD_HAND_INPUTS },
+                  calculationState: { type: "idle" },
+                }
+              : {
+                  expMulliganInputs: { ...DEFAULT_EXP_MULLIGAN_INPUTS },
+                  calculationState: { type: "idle" },
+                },
+          );
         },
       };
     },
     {
       name: "calculator-storage", // localStorageに保存されるキー
-      storage: createJSONStorage(() => localStorage), // localStorageを使用
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : (undefined as unknown as Storage),
+      ), // SSR/テスト環境でも安全
       partialize: (state) => ({
         // 永続化したい状態のみを抽出
         activeTab: state.activeTab,
