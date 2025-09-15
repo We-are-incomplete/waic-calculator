@@ -108,10 +108,11 @@ export const useCalculatorStore = create<CalculatorStore>()(
 
         // 算出プロパティ (getterを使ってリアルタイムに計算)
         get currentInputs() {
-          if (get().activeTab === "badHand") {
-            return get().badHandInputs;
+          const state = get();
+          if (state.activeTab === "badHand") {
+            return state.badHandInputs;
           }
-          return get().expMulliganInputs;
+          return state.expMulliganInputs;
         },
 
         // アクション
