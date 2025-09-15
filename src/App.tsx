@@ -1,7 +1,8 @@
 import React from "react";
 import CalculatorTabs from "./components/CalculatorTabs";
 import CalculatorForm from "./components/CalculatorForm";
-import CalculatorResult from "./components/CalculatorResult"; // CalculatorResultをインポート
+import CalculatorResult from "./components/CalculatorResult";
+import "./style.css";
 
 const App: React.FC = () => {
   return (
