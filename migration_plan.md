@@ -20,9 +20,9 @@
 - **言語**: TypeScript (既存プロジェクトに準拠)
 - **ビルドツール**: Vite (既存プロジェクトに準拠し、継続利用)
 - **状態管理**:
-  - 既存のVuex (`src/stores/calculator.ts`) のロジックを、ReactのContext API + `useReducer`、またはZustand/Jotaiなどの軽量な状態管理ライブラリに移行します。プロジェクトの規模を考慮し、これらの軽量な選択肢を推奨します。
-- **ルーティング**: (現在のプロジェクトにはルーティングが見当たらないため、必要に応じて検討) React Router
-- **UIライブラリ**: なし (既存のスタイルを維持)
+  - 既存のPinia (`src/stores/calculator.ts`) のロジックを、ReactのContext API + `useReducer`、またはZustand/Jotaiなどの軽量な状態管理ライブラリに移行します。プロジェクトの規模を考慮し、これらの軽量な選択肢を推奨します。
+- **ルーティング**: 現在のプロジェクトにはルーティングが見当たらないため、必要に応じて検討
+- **UIライブラリ**: shadcn/ui
 
 ## 4. 移行手順
 
@@ -56,7 +56,7 @@
 ### フェーズ3: 状態管理の移行
 
 1.  **`src/stores/calculator.ts`の移行**:
-    - VuexストアのロジックをReactのContext API + `useReducer`、またはZustand/Jotaiなどの状態管理ライブラリに書き換えます。
+    - PiniaストアのロジックをReactのContext API + `useReducer`、またはZustand/Jotaiなどの状態管理ライブラリに書き換えます。
     - `calculator.ts`で定義されているインターフェースとロジックを、Reactのフックやコンテキストプロバイダとして再実装します。
 
 ### フェーズ4: コンポーネントの移行
