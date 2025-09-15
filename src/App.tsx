@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import CalculatorTabs from "./components/CalculatorTabs";
 import CalculatorForm from "./components/CalculatorForm";
 import CalculatorResult from "./components/CalculatorResult"; // CalculatorResultをインポート

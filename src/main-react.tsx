@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App'; // 作成したApp.tsxをインポート
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App"; // 作成したApp.tsxをインポート
 
-ReactDOM.createRoot(document.getElementById('react-root')!).render(
+ReactDOM.createRoot(document.getElementById("react-root")!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

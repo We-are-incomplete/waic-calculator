@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect } from "react";
 import { useCalculatorStore } from "../stores/useCalculatorStore";
-import type { BadHandInputs, ExpMulliganInputs } from "../stores/useCalculatorStore";
+import type {
+  BadHandInputs,
+  ExpMulliganInputs,
+} from "../stores/useCalculatorStore";
 import {
   createBadHandFormFields,
   createExpMulliganFormFields,
@@ -36,7 +39,7 @@ const CalculatorForm: React.FC = () => {
       const inputs = expMulliganInputs;
       return inputs[fieldKey as keyof typeof inputs];
     },
-    [activeTab, badHandInputs, expMulliganInputs]
+    [activeTab, badHandInputs, expMulliganInputs],
   );
 
   // 入力値の変更処理
@@ -59,7 +62,7 @@ const CalculatorForm: React.FC = () => {
         [fieldKey]: value,
       } as Partial<ExpMulliganInputs>);
     },
-    [activeTab, updateBadHandInputs, updateExpMulliganInputs]
+    [activeTab, updateBadHandInputs, updateExpMulliganInputs],
   );
 
   const handleSubmit = useCallback(
@@ -67,7 +70,7 @@ const CalculatorForm: React.FC = () => {
       event.preventDefault();
       calculate();
     },
-    [calculate]
+    [calculate],
   );
 
   // キーボードショートカット (Enterで計算実行)

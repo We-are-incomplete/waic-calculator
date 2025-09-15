@@ -33,6 +33,7 @@
     ```bash
     pnpm create vite@latest my-react-app -- --template react-ts
     ```
+
     - 既存のプロジェクトのルートに統合するか、一時的に別のディレクトリで作業します。
 2.  **依存関係の移行**:
     - 既存の`package.json`から、Reactプロジェクトで必要となる依存関係を新しい`package.json`に移行します。

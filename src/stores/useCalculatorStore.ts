@@ -136,12 +136,20 @@ export const useCalculatorStore = create<CalculatorStore>()(
       },
       calculate: () => {
         set({ calculationState: { type: "calculating" } });
-        console.log("Calculation started. Current state:", get().calculationState);
+        console.log(
+          "Calculation started. Current state:",
+          get().calculationState,
+        );
 
         const state = get();
         if (state.activeTab === "badHand") {
           const { deck, hand, goodArtist, badArtist } = state.badHandInputs;
-          console.log("Calculating Bad Hand with inputs:", { deck, hand, goodArtist, badArtist });
+          console.log("Calculating Bad Hand with inputs:", {
+            deck,
+            hand,
+            goodArtist,
+            badArtist,
+          });
           const result = calcBadHand(deck, hand, goodArtist, badArtist);
 
           if (result.isErr()) {
@@ -155,7 +163,10 @@ export const useCalculatorStore = create<CalculatorStore>()(
             return;
           }
 
-          console.log("Bad Hand Calculation Success. Result value:", result.value);
+          console.log(
+            "Bad Hand Calculation Success. Result value:",
+            result.value,
+          );
           set({
             calculationState: {
               type: "success",
@@ -168,7 +179,11 @@ export const useCalculatorStore = create<CalculatorStore>()(
           });
         } else if (state.activeTab === "expMulligan") {
           const { deck, hand, artist } = state.expMulliganInputs;
-          console.log("Calculating Expected Mulligan with inputs:", { deck, hand, artist });
+          console.log("Calculating Expected Mulligan with inputs:", {
+            deck,
+            hand,
+            artist,
+          });
           const result = calcExpMulligan(deck, hand, artist);
 
           if (result.isErr()) {
@@ -182,7 +197,10 @@ export const useCalculatorStore = create<CalculatorStore>()(
             return;
           }
 
-          console.log("Expected Mulligan Calculation Success. Result value:", result.value);
+          console.log(
+            "Expected Mulligan Calculation Success. Result value:",
+            result.value,
+          );
           set({
             calculationState: {
               type: "success",
