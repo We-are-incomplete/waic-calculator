@@ -2,9 +2,16 @@ import React, { useMemo } from "react";
 import { useCalculatorStore } from "../stores/useCalculatorStore";
 
 const CalculatorResult: React.FC = () => {
-  const { hasResult, hasError, isCalculating } = useCalculatorStore();
-  const result = useCalculatorStore((state) => state.result);
-  const error = useCalculatorStore((state) => state.error);
+  const calculationState = useCalculatorStore(
+    (state) => state.calculationState,
+  );
+
+  // calculationState から派生状態を導出
+  const isCalculating = calculationState.type === "calculating";
+  const hasResult = calculationState.type === "success";
+  const hasError = calculationState.type === "error";
+  const result = hasResult ? calculationState.result : null;
+  const error = hasError ? calculationState.error : null;
 
   // 数値フォーマット用
   const formattedValue = useMemo(() => {

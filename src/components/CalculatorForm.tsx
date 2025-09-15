@@ -10,23 +10,30 @@ import {
 } from "../types/form";
 import type { FormField } from "../types/form";
 
+// フォームフィールドの定義をコンポーネントの外部に移動
+const badHandFormFields = createBadHandFormFields();
+const expMulliganFormFields = createExpMulliganFormFields();
+
 const CalculatorForm: React.FC = () => {
   const {
     activeTab,
     badHandInputs,
     expMulliganInputs,
-    isCalculating,
+    calculationState, // calculationState を取得
     updateBadHandInputs,
     updateExpMulliganInputs,
     calculate,
   } = useCalculatorStore();
 
+  // isCalculating を calculationState から派生させる
+  const isCalculating = calculationState.type === "calculating";
+
   // 現在のタブに応じたフォームフィールドを取得
   const currentFormFields = React.useMemo(() => {
     if (activeTab === "badHand") {
-      return createBadHandFormFields();
+      return badHandFormFields;
     }
-    return createExpMulliganFormFields();
+    return expMulliganFormFields;
   }, [activeTab]);
 
   // フィールド値の取得

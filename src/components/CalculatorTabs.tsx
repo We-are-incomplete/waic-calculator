@@ -11,6 +11,7 @@ interface Tab {
   label: string;
 }
 
+// tabs配列をコンポーネントの外部に移動
 const tabs: Tab[] = [
   {
     id: "badHand",
