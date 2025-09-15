@@ -2,45 +2,26 @@
 
 ## 技術スタック
 
-- **フロントエンド**: Vue.js (TypeScript)
+- **フロントエンド**: React (TypeScript)
 - **ビルドツール**: Vite
-- **パッケージマネージャー**: pnpm
+- **パッケージマネージャー**: Bun
 
 ## 開発環境のセットアップ
 
 1.  リポジトリのクローン
     ```bash
-    git clone https://github.com/suika-lunch/waic-calculator.git
+    git clone https://github.com/We-are-incomplete/waic-calculator.git
     cd waic-calculator
     ```
 2.  依存関係のインストール
     ```bash
-    pnpm install
+    bun install
     ```
 
-## 開発コマンド
+### 開発
 
-- **Linterの実行**:
-  ```bash
-  pnpm lint
-  ```
-- **Formatterの実行**:
-  ```bash
-  pnpm format
-  ```
-- **テストの実行**:
-  ```bash
-  pnpm test
-  ```
-- **開発サーバーの起動**:
-  ```bash
-  pnpm dev
-  ```
-- **アプリケーションのビルド**:
-  ```bash
-  pnpm build
-  ```
-- **ビルドされたアプリケーションのプレビュー**:
-  ```bash
-  pnpm preview
-  ```
+```bash
+bun start   # 開発サーバ (Vite)
+bun run build   # 本番ビルド
+bun preview # ローカルでビルド成果物を確認
+```
