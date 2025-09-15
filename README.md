@@ -2,9 +2,9 @@
 
 ## 技術スタック
 
-- **フロントエンド**: Vue.js (TypeScript)
+- **フロントエンド**: React (TypeScript)
 - **ビルドツール**: Vite
-- **パッケージマネージャー**: pnpm
+- **パッケージマネージャー**: Bun
 
 ## 開発環境のセットアップ
 
@@ -15,32 +15,5 @@
     ```
 2.  依存関係のインストール
     ```bash
-    pnpm install
+    bun install
     ```
-
-## 開発コマンド
-
-- **Linterの実行**:
-  ```bash
-  pnpm lint
-  ```
-- **Formatterの実行**:
-  ```bash
-  pnpm format
-  ```
-- **テストの実行**:
-  ```bash
-  pnpm test
-  ```
-- **開発サーバーの起動**:
-  ```bash
-  pnpm dev
-  ```
-- **アプリケーションのビルド**:
-  ```bash
-  pnpm build
-  ```
-- **ビルドされたアプリケーションのプレビュー**:
-  ```bash
-  pnpm preview
-  ```
