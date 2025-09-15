@@ -85,8 +85,10 @@ const CalculatorTabs: React.FC = () => {
       ) {
         return;
       }
-      if (event.altKey && !event.ctrlKey && !event.metaKey) {
-        const keyNum = parseInt(event.key);
+      if (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        const code = event.code || "";
+        const isDigit = code.startsWith("Digit") || code.startsWith("Numpad");
+        const keyNum = isDigit ? Number(code.slice(-1)) : NaN;
         if (keyNum >= 1 && keyNum <= tabs.length) {
           event.preventDefault();
           handleSetActiveTab(tabs[keyNum - 1]!.id);
@@ -128,7 +130,7 @@ const CalculatorTabs: React.FC = () => {
             {/* アクティブタブのインジケーター */}
             {activeTab === tab.id && (
               <div
-                className="absolute inset-0 bg-white rounded-md shadow-sm transition-all duration-200"
+                className="absolute inset-0 bg-white rounded-md shadow-sm transition-all duration-20 pointer-events-none"
                 style={{ zIndex: 1 }}
               ></div>
             )}

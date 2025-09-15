@@ -6,11 +6,14 @@ import "./style.css";
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-      <div className="max-w-md m-auto bg-white rounded-lg shadow-lg p-6">
+      <main
+        className="max-w-md m-auto bg-white rounded-lg shadow-lg p-6"
+        role="main"
+      >
         <CalculatorTabs />
         <CalculatorForm />
         <CalculatorResult /> {/* CalculatorResultを使用 */}
-      </div>
+      </main>
     </div>
   );
 }

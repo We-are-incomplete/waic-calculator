@@ -10,7 +10,7 @@
 
 1.  リポジトリのクローン
     ```bash
-    git clone https://github.com/suika-lunch/waic-calculator.git
+    git clone https://github.com/We-are-incomplete/waic-calculator.git
     cd waic-calculator
     ```
 2.  依存関係のインストール

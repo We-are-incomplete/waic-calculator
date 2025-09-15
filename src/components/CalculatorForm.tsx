@@ -102,6 +102,7 @@ const CalculatorForm = () => {
             onChange={(e) => handleInputChange(field.modelKey, e)}
             type={field.type}
             inputMode="numeric"
+            step={1}
             min={field.min}
             max={field.max}
             required={field.required}
