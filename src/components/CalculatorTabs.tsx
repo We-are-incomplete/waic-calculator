@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import {
-  useCalculatorStore,
-  type CalculatorTab,
-} from "../stores/useCalculatorStore";
+import { useCalculatorStore, type CalculatorTab } from "../stores/useCalculatorStore";
 import clsx from "clsx"; // 条件付きクラス名のためにclsxを使用
 
 // タブの定義 (既存のものをそのまま利用)
@@ -66,9 +63,7 @@ const CalculatorTabs: React.FC = () => {
       if (newIndex !== currentIndex) {
         handleSetActiveTab(tabs[newIndex]!.id);
         // フォーカスを新しいタブボタンに移動
-        const newTabButton = tabListRef.current?.children[
-          newIndex
-        ] as HTMLButtonElement;
+        const newTabButton = tabListRef.current?.children[newIndex] as HTMLButtonElement;
         newTabButton?.focus();
       }
     },
@@ -79,10 +74,7 @@ const CalculatorTabs: React.FC = () => {
   useEffect(() => {
     const handleGlobalKeydown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.isContentEditable || target.closest("input, textarea, select"))
-      ) {
+      if (target && (target.isContentEditable || target.closest("input, textarea, select"))) {
         return;
       }
       if (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
@@ -105,7 +97,7 @@ const CalculatorTabs: React.FC = () => {
   return (
     <div className="mb-6">
       <div
-        className="flex space-x-1 p-1 bg-gray-100 rounded-lg"
+        className="flex space-x-1 rounded-lg bg-gray-100 p-1"
         role="tablist"
         aria-orientation="horizontal"
         onKeyDown={handleKeydown}
@@ -119,10 +111,10 @@ const CalculatorTabs: React.FC = () => {
             tabIndex={activeTab === tab.id ? 0 : -1}
             role="tab"
             className={clsx(
-              "relative flex-1 py-2 px-3 text-sm font-medium text-center rounded-md transition-all duration-200",
+              "relative flex-1 rounded-md px-3 py-2 text-center text-sm font-medium transition-all duration-200",
               activeTab === tab.id
                 ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700",
             )}
           >
             <span className="relative z-10">{tab.label}</span>
@@ -130,7 +122,7 @@ const CalculatorTabs: React.FC = () => {
             {/* アクティブタブのインジケーター */}
             {activeTab === tab.id && (
               <div
-                className="absolute inset-0 bg-white rounded-md shadow-sm transition-all duration-20 pointer-events-none"
+                className="pointer-events-none absolute inset-0 rounded-md bg-white shadow-sm transition-all duration-20"
                 style={{ zIndex: 1 }}
               ></div>
             )}

@@ -1,9 +1,6 @@
 import { ok, err, type Result } from "neverthrow";
 import { combination } from "./combination";
-import type {
-  BadHandCalculationParams,
-  CalculationPercentage,
-} from "../types/calculation";
+import type { BadHandCalculationParams, CalculationPercentage } from "../types/calculation";
 import { validateBadHandParams } from "./validation";
 
 /**

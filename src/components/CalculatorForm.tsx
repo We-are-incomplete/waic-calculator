@@ -1,13 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useCalculatorStore } from "../stores/useCalculatorStore";
-import type {
-  BadHandInputs,
-  ExpMulliganInputs,
-} from "../stores/useCalculatorStore";
-import {
-  createBadHandFormFields,
-  createExpMulliganFormFields,
-} from "../types/form";
+import type { BadHandInputs, ExpMulliganInputs } from "../stores/useCalculatorStore";
+import { createBadHandFormFields, createExpMulliganFormFields } from "../types/form";
 
 // フォームフィールドの定義をコンポーネントの外部に移動
 const badHandFormFields = createBadHandFormFields();
@@ -29,10 +23,7 @@ const CalculatorForm = () => {
 
   // 現在のタブに応じたフォームフィールドを取得
   const currentFormFields = useMemo<
-    readonly (
-      | (typeof badHandFormFields)[number]
-      | (typeof expMulliganFormFields)[number]
-    )[]
+    readonly ((typeof badHandFormFields)[number] | (typeof expMulliganFormFields)[number])[]
   >(() => {
     if (activeTab === "badHand") {
       return badHandFormFields;
@@ -89,10 +80,7 @@ const CalculatorForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {currentFormFields.map((field) => (
         <div key={field.id}>
-          <label
-            htmlFor={field.id}
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-gray-700">
             {field.label}
           </label>
           <input
@@ -107,7 +95,7 @@ const CalculatorForm = () => {
             max={field.max}
             required={field.required}
             disabled={isCalculating}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
       ))}
@@ -116,7 +104,7 @@ const CalculatorForm = () => {
         <button
           type="submit"
           disabled={isCalculating}
-          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-white transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isCalculating ? "計算中..." : "計算する"}
         </button>

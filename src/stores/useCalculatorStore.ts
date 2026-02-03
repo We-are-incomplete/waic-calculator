@@ -69,11 +69,7 @@ export const useCalculatorStore = create<CalculatorStore>()(
   persist(
     (set, get) => {
       // ヘルパー関数: 計算結果を処理し、状態を更新
-      const handleCalculationResult = (
-        result: Result<number, string>,
-        successDescription: string,
-        unit: string,
-      ) => {
+      const handleCalculationResult = (result: Result<number, string>, successDescription: string, unit: string) => {
         if (result.isErr()) {
           set({
             calculationState: {
@@ -156,9 +152,7 @@ export const useCalculatorStore = create<CalculatorStore>()(
     {
       name: "calculator-storage", // localStorageに保存されるキー
       storage: createJSONStorage(() =>
-        typeof window !== "undefined"
-          ? localStorage
-          : (undefined as unknown as Storage),
+        typeof window !== "undefined" ? localStorage : (undefined as unknown as Storage),
       ), // SSR/テスト環境でも安全
       partialize: (state) => ({
         // 永続化したい状態のみを抽出

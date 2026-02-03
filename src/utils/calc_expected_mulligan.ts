@@ -1,20 +1,13 @@
 import { ok, err, type Result } from "neverthrow";
 import { combination } from "./combination";
-import type {
-  ExpectedMulliganParams,
-  CalculationCount,
-} from "../types/calculation";
+import type { ExpectedMulliganParams, CalculationCount } from "../types/calculation";
 import { validateExpectedMulliganParams } from "./validation";
 
 /**
  * マリガンの期待値を計算します。
  * 関数型アプローチで実装し、バリデーションを分離しています。
  */
-export function calcExpMulligan(
-  deck: number,
-  hand: number,
-  artist: number,
-): Result<CalculationCount, string> {
+export function calcExpMulligan(deck: number, hand: number, artist: number): Result<CalculationCount, string> {
   const params: ExpectedMulliganParams = { deck, hand, artist };
 
   // バリデーション（早期リターン）
