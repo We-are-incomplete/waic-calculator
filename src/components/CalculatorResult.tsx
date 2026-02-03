@@ -40,7 +40,7 @@ const CalculatorResult: React.FC = () => {
         <div
           role="status"
           aria-live="polite"
-          className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 shadow-lg transition-all duration-300 ease-out opacity-100 transform scale-100"
+          className="bg-linear-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 shadow-lg transition-all duration-300 ease-out opacity-100 transform scale-100"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-green-800">計算結果</h3>
@@ -71,7 +71,7 @@ const CalculatorResult: React.FC = () => {
           <div className="flex items-center gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-red-500 flex-shrink-0"
+              className="h-6 w-6 text-red-500 shrink-0"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
